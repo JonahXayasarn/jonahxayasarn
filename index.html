@@ -228,19 +228,173 @@
             color: #666;
         }
 
-        .download-btn {
-            padding: 0.5rem 1rem;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 6px;
+        .view-details {
             font-size: 0.875rem;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e1e4e8;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
+            color: #666;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
             transition: background 0.2s;
         }
 
-        .download-btn:hover {
+        .modal-close:hover {
+            background: #f6f8fa;
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #f6f8fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .modal-artist {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-section-content {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .download-list {
+            list-style: none;
+        }
+
+        .download-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f6f8fa;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .download-item-icon {
+            font-size: 1.25rem;
+        }
+
+        .download-item-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e1e4e8;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-primary:hover {
             background: #333;
+        }
+
+        .btn-secondary {
+            background: #f6f8fa;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e1e4e8;
         }
 
         /* Footer */
@@ -265,6 +419,10 @@
 
             .section-header h2 {
                 font-size: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 1rem;
             }
         }
 
@@ -342,6 +500,36 @@
         </div>
     </section>
 
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <div class="modal-icon">🎼</div>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-artist" id="modalArtist"></p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Available Files</h3>
+                    <div class="modal-section-content">
+                        <ul class="download-list" id="modalDownloads">
+                            <!-- Download links will be inserted here -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-section" id="modalDescriptionSection" style="display: none;">
+                    <h3 class="modal-section-title">Description</h3>
+                    <div class="modal-section-content" id="modalDescription"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" onclick="downloadAll()">Download All</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 Music Sheet Hub. All transcriptions are provided for educational purposes.</p>
@@ -349,81 +537,154 @@
     </footer>
 
     <script>
-        // Sample transcription data - Replace with your own!
+        // Sample transcription data
         const transcriptions = [
             {
                 title: "Black and Blues",
                 artist: "Al Jarreau",
                 files: 1,
-                downloadUrl: "https://drive.google.com/file/d/1KBmaC-ck1Pl1bq-NFAJkNjlUylHjtWyI/view?usp=sharing"
+                description: "A beautiful jazz standard arranged for various instruments.",
+                downloads: [
+                    {
+                        name: "Full Score",
+                        url: "https://drive.google.com/file/d/1KBmaC-ck1Pl1bq-NFAJkNjlUylHjtWyI/view?usp=sharing"
+                    }
+                ]
             },
             {
                 title: "Clair de Lune",
                 artist: "Claude Debussy",
                 files: 1,
-                downloadUrl: "#"
+                description: "Classical masterpiece arranged for piano.",
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "River Flows in You",
                 artist: "Yiruma",
                 files: 2,
-                downloadUrl: "#"
+                description: "Popular contemporary piece with multiple arrangements.",
+                downloads: [
+                    {
+                        name: "Piano - Easy Version",
+                        url: "#"
+                    },
+                    {
+                        name: "Piano - Advanced Version",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Canon in D",
                 artist: "Johann Pachelbel",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "String Quartet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Für Elise",
                 artist: "Ludwig van Beethoven",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Prelude in C Major",
                 artist: "Johann Sebastian Bach",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Nocturne Op. 9 No. 2",
                 artist: "Frédéric Chopin",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "The Entertainer",
                 artist: "Scott Joplin",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano - Ragtime",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Gymnopédie No. 1",
                 artist: "Erik Satie",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Maple Leaf Rag",
                 artist: "Scott Joplin",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano - Ragtime",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Arabesque No. 1",
                 artist: "Claude Debussy",
                 files: 1,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano Sheet",
+                        url: "#"
+                    }
+                ]
             },
             {
                 title: "Liebestraum No. 3",
                 artist: "Franz Liszt",
                 files: 2,
-                downloadUrl: "#"
+                downloads: [
+                    {
+                        name: "Piano - Full Version",
+                        url: "#"
+                    },
+                    {
+                        name: "Piano - Simplified",
+                        url: "#"
+                    }
+                ]
             }
         ];
+
+        let currentTranscription = null;
 
         // Update transcription count
         document.getElementById('transcription-count').textContent = transcriptions.length;
@@ -442,31 +703,109 @@
             
             noResults.style.display = 'none';
             
-            transcriptionsToRender.forEach(transcription => {
+            transcriptionsToRender.forEach((transcription, index) => {
                 const card = document.createElement('div');
                 card.className = 'transcription-card';
+                card.onclick = () => openModal(index);
                 card.innerHTML = `
                     <div class="card-icon">🎼</div>
                     <h3 class="card-title">${transcription.title}</h3>
                     <p class="card-artist">${transcription.artist}</p>
                     <div class="card-info">
                         <span class="file-count">${transcription.files} file${transcription.files > 1 ? 's' : ''} available</span>
-                        <button class="download-btn" onclick="downloadFile('${transcription.title}', '${transcription.downloadUrl}')">Download</button>
+                        <span class="view-details">View details →</span>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Function to handle downloads
-        function downloadFile(title, url) {
+        // Function to open modal
+        function openModal(index) {
+            currentTranscription = transcriptions[index];
+            const modal = document.getElementById('modal');
+            
+            document.getElementById('modalTitle').textContent = currentTranscription.title;
+            document.getElementById('modalArtist').textContent = currentTranscription.artist;
+            
+            // Populate downloads
+            const downloadsList = document.getElementById('modalDownloads');
+            downloadsList.innerHTML = '';
+            
+            currentTranscription.downloads.forEach(download => {
+                const li = document.createElement('li');
+                li.className = 'download-item';
+                li.innerHTML = `
+                    <span class="download-item-icon">📄</span>
+                    <span class="download-item-text">${download.name}</span>
+                `;
+                li.style.cursor = 'pointer';
+                li.onclick = () => downloadFile(download.url, download.name);
+                downloadsList.appendChild(li);
+            });
+            
+            // Show description if available
+            const descSection = document.getElementById('modalDescriptionSection');
+            const descContent = document.getElementById('modalDescription');
+            if (currentTranscription.description) {
+                descContent.textContent = currentTranscription.description;
+                descSection.style.display = 'block';
+            } else {
+                descSection.style.display = 'none';
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            currentTranscription = null;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Function to download a file
+        function downloadFile(url, name) {
             if (url === '#') {
-                alert(`This file is not yet available. Please add the download URL for: ${title}`);
+                alert(`"${name}" is not yet available. The download link will be added soon.`);
                 return;
             }
             
-            // Open the URL in a new tab
             window.open(url, '_blank');
+        }
+
+        // Function to download all files
+        function downloadAll() {
+            if (!currentTranscription) return;
+            
+            const validDownloads = currentTranscription.downloads.filter(d => d.url !== '#');
+            
+            if (validDownloads.length === 0) {
+                alert('No download links are available yet for this transcription.');
+                return;
+            }
+            
+            validDownloads.forEach((download, index) => {
+                setTimeout(() => {
+                    window.open(download.url, '_blank');
+                }, index * 500); // Stagger downloads by 500ms
+            });
         }
 
         // Search functionality
