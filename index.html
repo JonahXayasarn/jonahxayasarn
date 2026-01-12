@@ -285,7 +285,7 @@
     <!-- Header -->
     <header>
         <div class="header-content">
-            <a href="/jonahxayasarn/" class="logo">
+            <a href="./" class="logo">
                 <div class="logo-icon">🎵</div>
                 <div class="logo-text">
                     <h1>Music Sheet Hub</h1>
@@ -458,16 +458,15 @@
             });
         }
 
-        // Function to handle downloads - FIXED VERSION
+        // Function to handle downloads
         function downloadFile(title, url) {
             if (url === '#') {
                 alert(`This file is not yet available. Please add the download URL for: ${title}`);
                 return;
             }
             
-            // For GitHub Pages, simply navigate to the file
-            // This will either download it or open it in the browser
-            window.location.href = url;
+            // Open the URL in a new tab
+            window.open(url, '_blank');
         }
 
         // Search functionality
