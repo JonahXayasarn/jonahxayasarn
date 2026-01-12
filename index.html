@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Sheet Hub - Free Music Transcriptions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 1.5rem 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: white;
+            padding: 4rem 2rem;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Memo Section */
+        .memo-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .memo-card {
+            background: white;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .memo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .memo-content {
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .memo-content p {
+            margin-bottom: 1rem;
+        }
+
+        .memo-author {
+            color: #666;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Browse Section */
+        .browse-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .section-description {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin: 2rem 0;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        /* Transcription Grid */
+        .transcriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .transcription-card {
+            background: white;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .transcription-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: #f6f8fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #1a1a1a;
+        }
+
+        .card-artist {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        .file-count {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .download-btn {
+            padding: 0.5rem 1rem;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #333;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            border-top: 1px solid #e1e4e8;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 1.75rem;
+            }
+
+            .transcriptions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🎵</div>
+                <div class="logo-text">
+                    <h1>Music Sheet Hub</h1>
+                    <p>Free music transcriptions</p>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Free music sheets for free use</h2>
+            <p>High-quality music sheets from either performances or music</p>
+        </div>
+    </section>
+
+    <!-- Memo Section -->
+    <section class="memo-section">
+        <div class="memo-card">
+            <div class="memo-header">
+                <span>👤</span>
+                <strong>Memo</strong>
+            </div>
+            <div class="memo-content">
+                <p>I've started composing and transcripting some music just out of fun. Making music is my way out and I like seeing other people being satisfied with my work. It's really something to me.</p>
+                <p>Feel free to request any music you want me to put on a music sheet. Easily just do "Instrument(s) | Music"</p>
+                <p class="memo-author">— Jonah Xayasarn(Xylophone) -- I play the trumpet btw. Many people call me xylophone because of my last name.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse Transcriptions Section -->
+    <section class="browse-section">
+        <div class="section-header">
+            <h2>Browse Transcriptions</h2>
+            <p class="section-description">Search through <span id="transcription-count">0</span> available transcriptions. Transcriptions may be missing if the artist has the transcription available elsewhere.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search by song name, artist, or description...">
+        </div>
+
+        <!-- Transcriptions Grid -->
+        <div class="transcriptions-grid" id="transcriptionsGrid">
+            <!-- Cards will be inserted here by JavaScript -->
+        </div>
+
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="no-results-icon">🔍</div>
+            <p>No transcriptions found matching your search.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Music Sheet Hub. All transcriptions are provided for educational purposes.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Built with ❤️ for music education</p>
+    </footer>
+
+    <script>
+        // Sample transcription data - Replace with your own!
+        const transcriptions = [
+            {
+                title: "Black and Blues",
+                artist: "Al Jarreau",
+                files: 1,
+                downloadUrl: "files/Black and Blues-Trombone_1.pdf"
+            },
+            {
+                title: "Clair de Lune",
+                artist: "Claude Debussy",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "River Flows in You",
+                artist: "Yiruma",
+                files: 2,
+                downloadUrl: "#"
+            },
+            {
+                title: "Canon in D",
+                artist: "Johann Pachelbel",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Für Elise",
+                artist: "Ludwig van Beethoven",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Prelude in C Major",
+                artist: "Johann Sebastian Bach",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Nocturne Op. 9 No. 2",
+                artist: "Frédéric Chopin",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "The Entertainer",
+                artist: "Scott Joplin",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Gymnopédie No. 1",
+                artist: "Erik Satie",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Maple Leaf Rag",
+                artist: "Scott Joplin",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Arabesque No. 1",
+                artist: "Claude Debussy",
+                files: 1,
+                downloadUrl: "#"
+            },
+            {
+                title: "Liebestraum No. 3",
+                artist: "Franz Liszt",
+                files: 2,
+                downloadUrl: "#"
+            }
+        ];
+
+        // Update transcription count
+        document.getElementById('transcription-count').textContent = transcriptions.length;
+
+        // Function to render transcriptions
+        function renderTranscriptions(transcriptionsToRender) {
+            const grid = document.getElementById('transcriptionsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            grid.innerHTML = '';
+            
+            if (transcriptionsToRender.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            transcriptionsToRender.forEach(transcription => {
+                const card = document.createElement('div');
+                card.className = 'transcription-card';
+                card.innerHTML = `
+                    <div class="card-icon">🎼</div>
+                    <h3 class="card-title">${transcription.title}</h3>
+                    <p class="card-artist">${transcription.artist}</p>
+                    <div class="card-info">
+                        <span class="file-count">${transcription.files} file${transcription.files > 1 ? 's' : ''} available</span>
+                        <button class="download-btn" onclick="downloadFile('${transcription.title}', '${transcription.downloadUrl}')">Download</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Function to handle downloads - FIXED VERSION
+        function downloadFile(title, url) {
+            if (url === '#') {
+                alert(`This file is not yet available. Please add the download URL for: ${title}`);
+                return;
+            }
+            
+            // For GitHub Pages, simply navigate to the file
+            // This will either download it or open it in the browser
+            window.location.href = url;
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = transcriptions.filter(t => 
+                t.title.toLowerCase().includes(searchTerm) ||
+                t.artist.toLowerCase().includes(searchTerm)
+            );
+            renderTranscriptions(filtered);
+        });
+
+        // Initial render
+        renderTranscriptions(transcriptions);
+    </script>
+</body>
+</html>
